@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redis + WebSocket Chat Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        #messages {
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: scroll;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .msg {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .my-msg {
+            color: blue;
+        }
+
+        .server-msg {
+            color: green;
+        }
+
+        input[type="text"] {
+            width: 75%;
+            padding: 8px;
+        }
+
+        button {
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Live Chat Test</h2>
+    <div id="status" style="color: red; font-weight: bold; margin-bottom: 10px;">Disconnected</div>
+
+    <div id="messages"></div>
+
+    <form id="chat-form">
+        <input type="text" id="msg-input" placeholder="Type a message..." autocomplete="off" required>
+        <button type="submit">Send</button>
+    </form>
+
+    <!-- Load Socket.io Client -->
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script>
+        // REPLACE THIS with your EasyPanel App Domain (e.g., https://api.yourdomain.com)
+        // If testing locally before setting up a domain, use your server's IP: http://178.104.100.181:3000
+        const BACKEND_URL = "https://n8n-host-ws-server.arwjwc.easypanel.host";
+
+        const socket = io(BACKEND_URL, {
+            transports: ["websocket"]
+        });
+        const statusDiv = document.getElementById('status');
+        const messagesDiv = document.getElementById('messages');
+        const chatForm = document.getElementById('chat-form');
+        const msgInput = document.getElementById('msg-input');
+
+        // Connection Events
+        socket.on('connect', () => {
+            statusDiv.textContent = `Connected! (ID: ${socket.id})`;
+            statusDiv.style.color = "green";
+        });
+
+        socket.on('disconnect', () => {
+            statusDiv.textContent = "Disconnected";
+            statusDiv.style.color = "red";
+        });
+
+        // Listen for incoming messages from Redis/Backend
+        socket.on('chat_message', (msg) => {
+            const div = document.createElement('div');
+            div.className = 'msg server-msg';
+            div.textContent = `Server Broadcast: ${msg}`;
+            messagesDiv.appendChild(div);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        });
+
+        // Send messages to the backend
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = msgInput.value;
+
+            // Emit to server
+            socket.emit('chat_message', text);
+
+            // Display locally
+            const div = document.createElement('div');
+            div.className = 'msg my-msg';
+            div.textContent = `You: ${text}`;
+            messagesDiv.appendChild(div);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            msgInput.value = '';
+        });
+    </script>
+</body>
+
+</html>
