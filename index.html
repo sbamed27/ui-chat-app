@@ -4,12 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redis + WebSocket Chat Test</title>
+    <title>Redis + WebSocket Private Chat</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 500px;
+            display: flex;
+            max-width: 800px;
             margin: 20px auto;
+            gap: 20px;
+        }
+
+        #sidebar {
+            width: 250px;
+            border-right: 1px solid #ccc;
+            padding-right: 10px;
+        }
+
+        #chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         #messages {
@@ -18,6 +32,21 @@
             overflow-y: scroll;
             padding: 10px;
             margin-bottom: 10px;
+        }
+
+        .user-item {
+            padding: 8px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-item:hover {
+            background: #f0f0f0;
+        }
+
+        .user-item.active {
+            background: #e0e0e0;
+            font-weight: bold;
         }
 
         .msg {
@@ -29,7 +58,7 @@
             color: blue;
         }
 
-        .server-msg {
+        .peer-msg {
             color: green;
         }
 
@@ -47,34 +76,78 @@
 
 <body>
 
-    <h2>Live Chat Test</h2>
-    <div id="status" style="color: red; font-weight: bold; margin-bottom: 10px;">Disconnected</div>
+    <div id="sidebar">
+        <h3>Users Online</h3>
+        <div id="user-list"></div>
+    </div>
 
-    <div id="messages"></div>
+    <div id="chat-container">
+        <h2 id="chat-title">Select a user to chat</h2>
+        <div id="status" style="color: red; font-weight: bold; margin-bottom: 10px;">Disconnected</div>
+        <div id="messages"></div>
+        <form id="chat-form" style="display: none;">
+            <input type="text" id="msg-input" placeholder="Type a private message..." autocomplete="off" required>
+            <button type="submit">Send</button>
+        </form>
+    </div>
 
-    <form id="chat-form">
-        <input type="text" id="msg-input" placeholder="Type a message..." autocomplete="off" required>
-        <button type="submit">Send</button>
-    </form>
-
-    <!-- Load Socket.io Client -->
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <script>
         const BACKEND_URL = "https://n8n-host-ws-server.arwjwc.easypanel.host";
-
-        // Prompt user for a username upon opening the page
         let username = prompt("Enter your username:") || "Anonymous";
+        let activeRecipient = null;
 
-        const socket = io(BACKEND_URL, {
-            transports: ["websocket"]
-        });
+        const socket = io(BACKEND_URL, { transports: ["websocket"] });
 
         const statusDiv = document.getElementById('status');
+        const userListDiv = document.getElementById('user-list');
+        const chatTitle = document.getElementById('chat-title');
         const messagesDiv = document.getElementById('messages');
         const chatForm = document.getElementById('chat-form');
         const msgInput = document.getElementById('msg-input');
 
-        // Helper function to render messages
+        socket.on('connect', () => {
+            statusDiv.textContent = `Connected as ${username}`;
+            statusDiv.style.color = "green";
+
+            // Register user and get list of peers
+            socket.emit('register_user', username, (response) => {
+                if (response.success) {
+                    renderUserList(response.users);
+                }
+            });
+        });
+
+        function renderUserList(users) {
+            userListDiv.innerHTML = '';
+            users.forEach(user => {
+                const div = document.createElement('div');
+                div.className = 'user-item';
+                div.textContent = user;
+                div.onclick = () => selectUser(user, div);
+                userListDiv.appendChild(div);
+            });
+        }
+
+        function selectUser(user, element) {
+            document.querySelectorAll('.user-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            activeRecipient = user;
+            chatTitle.textContent = `Chat with ${user}`;
+            messagesDiv.innerHTML = '';
+            chatForm.style.display = 'block';
+
+            // Join private room and fetch history
+            socket.emit('join_private_chat', { recipient: user }, (response) => {
+                if (response.success) {
+                    response.history.forEach(msg => {
+                        const className = msg.sender === username ? 'my-msg' : 'peer-msg';
+                        appendMessage(msg.sender, msg.content, className);
+                    });
+                }
+            });
+        }
+
         function appendMessage(sender, content, className) {
             const div = document.createElement('div');
             div.className = `msg ${className}`;
@@ -83,41 +156,20 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        // Connection Events
-        socket.on('connect', () => {
-            statusDiv.textContent = `Connected as ${username} (ID: ${socket.id})`;
-            statusDiv.style.color = "green";
+        // Listen for incoming private messages
+        socket.on('private_message', ({ sender, content }) => {
+            if (activeRecipient === sender) {
+                appendMessage(sender, content, 'peer-msg');
+            }
         });
 
-        socket.on('disconnect', () => {
-            statusDiv.textContent = "Disconnected";
-            statusDiv.style.color = "red";
-        });
-
-        // Load past messages from PostgreSQL upon connection
-        socket.on('init_history', (history) => {
-            history.forEach(msg => {
-                const className = msg.sender === username ? 'my-msg' : 'server-msg';
-                appendMessage(msg.sender, msg.content, className);
-            });
-        });
-
-        // Listen for incoming messages from other users via Redis/Backend broadcast
-        socket.on('chat_message', ({ sender, content }) => {
-            appendMessage(sender, content, 'server-msg');
-        });
-
-        // Send messages to the backend
         chatForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            if (!activeRecipient) return;
             const content = msgInput.value;
 
-            // Emit object containing sender and content
-            socket.emit('chat_message', { sender: username, content });
-
-            // Display locally for the sender
+            socket.emit('private_message', { recipient: activeRecipient, content });
             appendMessage(username, content, 'my-msg');
-
             msgInput.value = '';
         });
     </script>
