@@ -4,144 +4,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redis + WebSocket Private Chat</title>
+    <title>Secure JWT WebSocket Chat</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            max-width: 800px;
-            margin: 20px auto;
+            max-width: 900px;
+            margin: 30px auto;
+            background: #f9f9f9;
+        }
+
+        .card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #auth-screen {
+            max-width: 400px;
+            margin: 50px auto;
+        }
+
+        #chat-screen {
+            display: none;
+            height: 500px;
             gap: 20px;
         }
 
         #sidebar {
             width: 250px;
-            border-right: 1px solid #ccc;
-            padding-right: 10px;
+            border-right: 1px solid #ddd;
+            padding-right: 15px;
+            display: flex;
+            flex-direction: column;
         }
 
-        #chat-container {
+        #user-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .user-item {
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            background: #f1f1f1;
+        }
+
+        .user-item:hover {
+            background: #e2e2e2;
+        }
+
+        .user-item.active {
+            background: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+
+        #chat-main {
             flex: 1;
             display: flex;
             flex-direction: column;
         }
 
         #messages {
-            border: 1px solid #ccc;
-            height: 300px;
-            overflow-y: scroll;
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow-y: auto;
             padding: 10px;
             margin-bottom: 10px;
-        }
-
-        .user-item {
-            padding: 8px;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
-        }
-
-        .user-item:hover {
-            background: #f0f0f0;
-        }
-
-        .user-item.active {
-            background: #e0e0e0;
-            font-weight: bold;
+            background: #fff;
         }
 
         .msg {
-            padding: 5px;
-            border-bottom: 1px solid #eee;
+            padding: 6px 10px;
+            margin-bottom: 6px;
+            border-radius: 4px;
+            max-width: 75%;
         }
 
         .my-msg {
-            color: blue;
+            background: #dcf8c6;
+            margin-left: auto;
+            text-align: right;
         }
 
         .peer-msg {
-            color: green;
+            background: #e5eee5;
+            margin-right: auto;
         }
 
-        input[type="text"] {
-            width: 75%;
-            padding: 8px;
+        input,
+        button {
+            padding: 10px;
+            margin-top: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
 
         button {
-            padding: 8px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
             cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .toggle-link {
+            text-align: center;
+            margin-top: 15px;
+            color: #007bff;
+            cursor: pointer;
+            font-size: 14px;
         }
     </style>
 </head>
 
 <body>
 
-    <div id="sidebar">
-        <h3>Users Online</h3>
-        <div id="user-list"></div>
+    <!-- AUTHENTICATION SCREEN -->
+    <div id="auth-screen" class="card">
+        <h2 id="auth-title" style="margin-top:0; text-align:center;">Sign In</h2>
+        <form id="auth-form">
+            <input type="text" id="username" placeholder="Username" required autocomplete="username">
+            <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
+            <button type="submit" id="auth-btn">Sign In</button>
+        </form>
+        <div class="toggle-link" id="toggle-mode">Need an account? Sign Up</div>
+        <div id="auth-error" style="color: red; font-size: 14px; margin-top: 10px; text-align: center;"></div>
     </div>
 
-    <div id="chat-container">
-        <h2 id="chat-title">Select a user to chat</h2>
-        <div id="status" style="color: red; font-weight: bold; margin-bottom: 10px;">Disconnected</div>
-        <div id="messages"></div>
-        <form id="chat-form" style="display: none;">
-            <input type="text" id="msg-input" placeholder="Type a private message..." autocomplete="off" required>
-            <button type="submit">Send</button>
-        </form>
+    <!-- CHAT APPLICATION SCREEN -->
+    <div id="chat-screen" class="card" style="display:none; display:flex;">
+        <div id="sidebar">
+            <div>
+                <h3 id="current-user-label" style="margin:0 0 10px 0; font-size: 16px;"></h3>
+                <button id="logout-btn" style="background: #dc3545; padding: 6px;">Logout</button>
+            </div>
+            <hr style="border:0; border-top:1px solid #ddd; margin: 10px 0;">
+            <div style="font-weight: bold; font-size: 14px; color: #666;">Contacts</div>
+            <div id="user-list"></div>
+        </div>
+        <div id="chat-main">
+            <h3 id="chat-header"
+                style="margin-top:0; border-bottom: 1px solid #ddd; padding-bottom: 8px; font-size: 16px;">Select a
+                contact</h3>
+            <div id="messages"></div>
+            <form id="chat-form" style="display:none; display:flex; gap: 8px; margin:0;">
+                <input type="text" id="msg-input" placeholder="Type a private message..." autocomplete="off" required
+                    style="margin:0;">
+                <button type="submit" style="width: 100px; margin:0;">Send</button>
+            </form>
+        </div>
     </div>
 
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <script>
         const BACKEND_URL = "https://n8n-host-ws-server.arwjwc.easypanel.host";
-        let username = prompt("Enter your username:") || "Anonymous";
+
+        let isSignupMode = false;
+        let socket = null;
         let activeRecipient = null;
+        let currentUsername = localStorage.getItem('chat_username');
+        let token = localStorage.getItem('chat_token');
 
-        const socket = io(BACKEND_URL, { transports: ["websocket"] });
+        const authScreen = document.getElementById('auth-screen');
+        const chatScreen = document.getElementById('chat-screen');
+        const authForm = document.getElementById('auth-form');
+        const authTitle = document.getElementById('auth-title');
+        const authBtn = document.getElementById('auth-btn');
+        const toggleMode = document.getElementById('toggle-mode');
+        const authError = document.getElementById('auth-error');
 
-        const statusDiv = document.getElementById('status');
         const userListDiv = document.getElementById('user-list');
-        const chatTitle = document.getElementById('chat-title');
+        const currentUserLabel = document.getElementById('current-user-label');
+        const chatHeader = document.getElementById('chat-header');
         const messagesDiv = document.getElementById('messages');
         const chatForm = document.getElementById('chat-form');
         const msgInput = document.getElementById('msg-input');
+        const logoutBtn = document.getElementById('logout-btn');
 
-        socket.on('connect', () => {
-            statusDiv.textContent = `Connected as ${username}`;
-            statusDiv.style.color = "green";
+        // Toggle between Sign In and Sign Up views
+        toggleMode.onclick = () => {
+            isSignupMode = !isSignupMode;
+            authTitle.textContent = isSignupMode ? 'Sign Up' : 'Sign In';
+            authBtn.textContent = isSignupMode ? 'Create Account' : 'Sign In';
+            toggleMode.textContent = isSignupMode ? 'Already have an account? Sign In' : "Need an account? Sign Up";
+            authError.textContent = '';
+        };
 
-            // Register user and get list of peers
-            socket.emit('register_user', username, (response) => {
-                if (response.success) {
-                    renderUserList(response.users);
+        // Handle Signup / Signin submission
+        authForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const endpoint = isSignupMode ? '/api/signup' : '/api/signin';
+
+            try {
+                const res = await fetch(`${BACKEND_URL}${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+
+                if (!res.ok) throw new Error(data.error || 'Authentication failed');
+
+                // Save credentials in browser storage
+                localStorage.setItem('chat_token', data.token);
+                localStorage.setItem('chat_username', data.username);
+                token = data.token;
+                currentUsername = data.username;
+
+                initChatApp();
+            } catch (err) {
+                authError.textContent = err.message;
+            }
+        };
+
+        // Logout functionality
+        logoutBtn.onclick = () => {
+            localStorage.clear();
+            if (socket) socket.disconnect();
+            chatScreen.style.display = 'none';
+            authScreen.style.display = 'block';
+            document.getElementById('password').value = '';
+            activeRecipient = null;
+        };
+
+        // Auto-login if token already exists in browser storage
+        if (token && currentUsername) {
+            initChatApp();
+        }
+
+        function initChatApp() {
+            authScreen.style.display = 'none';
+            chatScreen.style.display = 'flex';
+            currentUserLabel.textContent = `User: ${currentUsername}`;
+
+            // Initialize Socket.io connection, passing JWT in auth handshake
+            socket = io(BACKEND_URL, {
+                auth: { token },
+                transports: ["websocket"]
+            });
+
+            socket.on('connect_error', (err) => {
+                authError.textContent = "Session expired. Please log in again.";
+                logoutBtn.click();
+            });
+
+            socket.on('user_list', (users) => {
+                renderUserList(users);
+            });
+
+            socket.on('private_message', ({ sender, content }) => {
+                if (activeRecipient === sender) {
+                    appendMessage(sender, content, 'peer-msg');
                 }
             });
-        });
+        }
 
         function renderUserList(users) {
             userListDiv.innerHTML = '';
+            if (users.length === 0) {
+                userListDiv.innerHTML = '<div style="color:#888; font-size:13px; padding:5px;">No other users online</div>';
+                return;
+            }
             users.forEach(user => {
                 const div = document.createElement('div');
-                div.className = 'user-item';
+                div.className = `user-item ${activeRecipient === user ? 'active' : ''}`;
                 div.textContent = user;
-                div.onclick = () => selectUser(user, div);
+                div.onclick = () => selectRecipient(user, div);
                 userListDiv.appendChild(div);
             });
         }
 
-        function selectUser(user, element) {
+        function selectRecipient(user, element) {
             document.querySelectorAll('.user-item').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
             activeRecipient = user;
-            chatTitle.textContent = `Chat with ${user}`;
+            chatHeader.textContent = `Chat with ${user}`;
             messagesDiv.innerHTML = '';
-            chatForm.style.display = 'block';
+            chatForm.style.display = 'flex';
 
-            // Join private room and fetch history
-            socket.emit('join_private_chat', { recipient: user }, (response) => {
-                if (response.success) {
-                    response.history.forEach(msg => {
-                        const className = msg.sender === username ? 'my-msg' : 'peer-msg';
+            socket.emit('join_private_chat', { recipient: user }, (res) => {
+                if (res.success) {
+                    res.history.forEach(msg => {
+                        const className = msg.sender === currentUsername ? 'my-msg' : 'peer-msg';
                         appendMessage(msg.sender, msg.content, className);
                     });
                 }
@@ -151,27 +309,21 @@
         function appendMessage(sender, content, className) {
             const div = document.createElement('div');
             div.className = `msg ${className}`;
-            div.textContent = `${sender}: ${content}`;
+            div.innerHTML = `<strong>${sender}:</strong> ${content}`;
             messagesDiv.appendChild(div);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        // Listen for incoming private messages
-        socket.on('private_message', ({ sender, content }) => {
-            if (activeRecipient === sender) {
-                appendMessage(sender, content, 'peer-msg');
-            }
-        });
-
-        chatForm.addEventListener('submit', (e) => {
+        chatForm.onsubmit = (e) => {
             e.preventDefault();
             if (!activeRecipient) return;
-            const content = msgInput.value;
+            const content = msgInput.value.trim();
+            if (!content) return;
 
             socket.emit('private_message', { recipient: activeRecipient, content });
-            appendMessage(username, content, 'my-msg');
+            appendMessage(currentUsername, content, 'my-msg');
             msgInput.value = '';
-        });
+        };
     </script>
 </body>
 
