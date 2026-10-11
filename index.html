@@ -60,21 +60,32 @@
     <!-- Load Socket.io Client -->
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <script>
-        // REPLACE THIS with your EasyPanel App Domain (e.g., https://api.yourdomain.com)
-        // If testing locally before setting up a domain, use your server's IP: http://178.104.100.181:3000
         const BACKEND_URL = "https://n8n-host-ws-server.arwjwc.easypanel.host";
+
+        // Prompt user for a username upon opening the page
+        let username = prompt("Enter your username:") || "Anonymous";
 
         const socket = io(BACKEND_URL, {
             transports: ["websocket"]
         });
+
         const statusDiv = document.getElementById('status');
         const messagesDiv = document.getElementById('messages');
         const chatForm = document.getElementById('chat-form');
         const msgInput = document.getElementById('msg-input');
 
+        // Helper function to render messages
+        function appendMessage(sender, content, className) {
+            const div = document.createElement('div');
+            div.className = `msg ${className}`;
+            div.textContent = `${sender}: ${content}`;
+            messagesDiv.appendChild(div);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
         // Connection Events
         socket.on('connect', () => {
-            statusDiv.textContent = `Connected! (ID: ${socket.id})`;
+            statusDiv.textContent = `Connected as ${username} (ID: ${socket.id})`;
             statusDiv.style.color = "green";
         });
 
@@ -83,29 +94,29 @@
             statusDiv.style.color = "red";
         });
 
-        // Listen for incoming messages from Redis/Backend
-        socket.on('chat_message', (msg) => {
-            const div = document.createElement('div');
-            div.className = 'msg server-msg';
-            div.textContent = `Server Broadcast: ${msg}`;
-            messagesDiv.appendChild(div);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        // Load past messages from PostgreSQL upon connection
+        socket.on('init_history', (history) => {
+            history.forEach(msg => {
+                const className = msg.sender === username ? 'my-msg' : 'server-msg';
+                appendMessage(msg.sender, msg.content, className);
+            });
+        });
+
+        // Listen for incoming messages from other users via Redis/Backend broadcast
+        socket.on('chat_message', ({ sender, content }) => {
+            appendMessage(sender, content, 'server-msg');
         });
 
         // Send messages to the backend
         chatForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const text = msgInput.value;
+            const content = msgInput.value;
 
-            // Emit to server
-            socket.emit('chat_message', text);
+            // Emit object containing sender and content
+            socket.emit('chat_message', { sender: username, content });
 
-            // Display locally
-            const div = document.createElement('div');
-            div.className = 'msg my-msg';
-            div.textContent = `You: ${text}`;
-            messagesDiv.appendChild(div);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            // Display locally for the sender
+            appendMessage(username, content, 'my-msg');
 
             msgInput.value = '';
         });
