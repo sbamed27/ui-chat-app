@@ -202,6 +202,7 @@
         let activeRecipient = null;
         let currentUsername = localStorage.getItem('chat_username');
         let token = localStorage.getItem('chat_token');
+        let usersCache = []; // Cache for user list & presence statuses
 
         const authScreen = document.getElementById('auth-screen');
         const chatScreen = document.getElementById('chat-screen');
@@ -288,32 +289,28 @@
                 logoutBtn.click();
             });
 
+            // Receive full initial user list with online status
             socket.on('user_list', (users) => {
-                renderUserList(users);
+                usersCache = users;
+                renderUserList(usersCache);
             });
 
+            // Listen for live status toggles from Redis/Socket broadcast
+            socket.on('user_status', ({ username, isOnline }) => {
+                const user = usersCache.find(u => u.username === username);
+                if (user) {
+                    user.isOnline = isOnline;
+                    renderUserList(usersCache);
+                }
+            });
+
+            // Listen for incoming private messages
             socket.on('private_message', ({ sender, content }) => {
                 if (activeRecipient === sender) {
                     appendMessage(sender, content, 'peer-msg');
                 }
             });
         }
-
-        let usersCache = [];
-
-        socket.on('user_list', (users) => {
-            usersCache = users;
-            renderUserList(usersCache);
-        });
-
-        // Listen for live status toggles from Redis/Socket broadcast
-        socket.on('user_status', ({ username, isOnline }) => {
-            const user = usersCache.find(u => u.username === username);
-            if (user) {
-                user.isOnline = isOnline;
-                renderUserList(usersCache);
-            }
-        });
 
         function renderUserList(users) {
             userListDiv.innerHTML = '';
