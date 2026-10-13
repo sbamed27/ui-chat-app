@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            max-width: 920px;
+            max-width: 940px;
             margin: 30px auto;
             background: #f8fafc;
             color: #1e293b;
@@ -37,14 +37,88 @@
 
         #chat-screen {
             display: none;
-            height: 560px;
+            height: 580px;
             gap: 20px;
         }
 
         #sidebar {
-            width: 260px;
+            width: 280px;
             border-right: 1px solid #f1f5f9;
             padding-right: 18px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Sidebar Tabs */
+        .sidebar-tabs {
+            display: flex;
+            gap: 4px;
+            background: #f1f5f9;
+            padding: 3px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 7px 6px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #64748b;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 0;
+            width: auto;
+        }
+
+        .tab-btn:hover {
+            color: #1e293b;
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .tab-btn.active {
+            color: #1d4ed8;
+            background: #ffffff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .badge {
+            background: #e2e8f0;
+            color: #475569;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 10px;
+            line-height: 1.3;
+        }
+
+        .tab-btn.active .badge {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .badge-alert {
+            background: #ef4444 !important;
+            color: #ffffff !important;
+            animation: pulseAlert 2s infinite;
+        }
+
+        @keyframes pulseAlert {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        /* Tab Panels */
+        .tab-panel {
+            flex-grow: 1;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
         }
@@ -52,7 +126,6 @@
         #user-list {
             flex-grow: 1;
             overflow-y: auto;
-            margin-top: 10px;
             display: flex;
             flex-direction: column;
             gap: 4px;
@@ -81,6 +154,139 @@
             color: #1d4ed8;
             border-color: #bfdbfe;
             font-weight: 600;
+        }
+
+        /* User Avatar circle */
+        .avatar-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            text-transform: uppercase;
+        }
+
+        /* Search Box & Results */
+        .search-box-wrap {
+            margin-bottom: 10px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 9px 12px;
+            font-size: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            margin: 0;
+        }
+
+        .search-results-list, .requests-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+        }
+
+        .search-card, .request-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 9px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            transition: background 0.15s ease;
+        }
+
+        .search-card:hover, .request-card:hover {
+            background: #f1f5f9;
+        }
+
+        .card-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow: hidden;
+        }
+
+        .card-username {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e293b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-subtext {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .btn-action-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            width: auto;
+            margin: 0;
+            transition: all 0.15s ease;
+        }
+
+        .btn-add {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-add:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-add.sent {
+            background: #10b981;
+            cursor: default;
+        }
+
+        .btn-accept {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-accept:hover {
+            background: #059669;
+        }
+
+        .btn-reject {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-reject:hover {
+            background: #cbd5e1;
+            color: #1e293b;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 13px;
+            padding: 24px 10px;
+            line-height: 1.5;
         }
 
         #chat-main {
@@ -254,9 +460,9 @@
         #logout-btn {
             background: #ef4444;
             color: white;
-            padding: 7px 12px;
+            padding: 6px 11px;
             border-radius: 6px;
-            font-size: 13px;
+            font-size: 12px;
         }
 
         #logout-btn:hover {
@@ -293,10 +499,44 @@
         .offline {
             background-color: #cbd5e1;
         }
+
+        /* Toast Container */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: #1e293b;
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: auto;
+        }
+
+        @keyframes toastIn {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
     </style>
 </head>
 
 <body>
+
+    <div id="toast-container" class="toast-container"></div>
 
     <!-- AUTHENTICATION SCREEN -->
     <div id="auth-screen" class="card">
@@ -317,10 +557,42 @@
                 <h3 id="current-user-label" style="margin:0; font-size: 15px; font-weight: 600;"></h3>
                 <button id="logout-btn" style="width: auto; margin:0;">Logout</button>
             </div>
-            <hr style="border:0; border-top:1px solid #e2e8f0; margin: 12px 0;">
-            <div style="font-weight: 600; font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Contacts</div>
-            <div id="user-list"></div>
+            <hr style="border:0; border-top:1px solid #e2e8f0; margin: 12px 0 10px 0;">
+
+            <!-- SIDEBAR TABS: FRIENDS, REQUESTS, SEARCH -->
+            <div class="sidebar-tabs">
+                <button class="tab-btn active" id="tab-friends-btn" type="button">
+                    Friends <span id="friends-badge" class="badge">0</span>
+                </button>
+                <button class="tab-btn" id="tab-requests-btn" type="button">
+                    Requests <span id="requests-badge" class="badge badge-alert" style="display:none;">0</span>
+                </button>
+                <button class="tab-btn" id="tab-search-btn" type="button" title="Search & Add Friends">
+                    + Add
+                </button>
+            </div>
+
+            <!-- PANEL 1: FILTERED CONTACTS (ACCEPTED FRIENDS) -->
+            <div id="panel-friends" class="tab-panel">
+                <div id="user-list"></div>
+            </div>
+
+            <!-- PANEL 2: INCOMING PENDING REQUESTS -->
+            <div id="panel-requests" class="tab-panel" style="display: none;">
+                <div id="requests-list" class="requests-list"></div>
+            </div>
+
+            <!-- PANEL 3: USER SEARCH & ADD FRIEND -->
+            <div id="panel-search" class="tab-panel" style="display: none;">
+                <div class="search-box-wrap">
+                    <input type="text" id="user-search-input" class="search-input" placeholder="Search by username..." autocomplete="off">
+                </div>
+                <div id="search-results" class="search-results-list">
+                    <div class="empty-state">Type a username above to search for people.</div>
+                </div>
+            </div>
         </div>
+
         <div id="chat-main">
             <h3 id="chat-header"
                 style="margin-top:0; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; font-size: 16px; font-weight: 600;">Select a
@@ -358,7 +630,8 @@
         let activeRecipientId = null;
         let currentUsername = localStorage.getItem('chat_username');
         let token = localStorage.getItem('chat_token');
-        let usersCache = []; // Cache for user list & presence statuses
+        let usersCache = []; // Cache for accepted friends list & presence statuses
+        let pendingRequestsList = []; // Cache for incoming pending friend requests
 
         // Typing detection state
         let isTyping = false;
@@ -368,6 +641,9 @@
         // Peer typing indicator state
         let peerTypingTimeout = null;
         const PEER_TYPING_AUTO_HIDE_MS = 3500; // Auto-hide indicator if typing_stop missed
+
+        // Search debounce
+        let searchDebounceTimer = null;
 
         const authScreen = document.getElementById('auth-screen');
         const chatScreen = document.getElementById('chat-screen');
@@ -386,6 +662,46 @@
         const logoutBtn = document.getElementById('logout-btn');
         const typingIndicator = document.getElementById('typing-indicator');
         const typingUserLabel = document.getElementById('typing-user');
+
+        // Tabs & Panels
+        const tabFriendsBtn = document.getElementById('tab-friends-btn');
+        const tabRequestsBtn = document.getElementById('tab-requests-btn');
+        const tabSearchBtn = document.getElementById('tab-search-btn');
+        const panelFriends = document.getElementById('panel-friends');
+        const panelRequests = document.getElementById('panel-requests');
+        const panelSearch = document.getElementById('panel-search');
+        const requestsListDiv = document.getElementById('requests-list');
+        const userSearchInput = document.getElementById('user-search-input');
+        const searchResultsDiv = document.getElementById('search-results');
+        const requestsBadge = document.getElementById('requests-badge');
+        const friendsBadge = document.getElementById('friends-badge');
+
+        // Tab navigation handlers
+        tabFriendsBtn.onclick = () => switchTab('friends');
+        tabRequestsBtn.onclick = () => switchTab('requests');
+        tabSearchBtn.onclick = () => switchTab('search');
+
+        function switchTab(tabName) {
+            tabFriendsBtn.classList.remove('active');
+            tabRequestsBtn.classList.remove('active');
+            tabSearchBtn.classList.remove('active');
+            panelFriends.style.display = 'none';
+            panelRequests.style.display = 'none';
+            panelSearch.style.display = 'none';
+
+            if (tabName === 'friends') {
+                tabFriendsBtn.classList.add('active');
+                panelFriends.style.display = 'flex';
+            } else if (tabName === 'requests') {
+                tabRequestsBtn.classList.add('active');
+                panelRequests.style.display = 'flex';
+                renderRequestsList(pendingRequestsList);
+            } else if (tabName === 'search') {
+                tabSearchBtn.classList.add('active');
+                panelSearch.style.display = 'flex';
+                userSearchInput.focus();
+            }
+        }
 
         // Toggle between Sign In and Sign Up views
         toggleMode.onclick = () => {
@@ -439,7 +755,6 @@
             const content = msgInput.value.trim();
             const recipientId = getActiveRecipientId();
 
-            // Clear input: immediately emit stop
             if (content.length === 0) {
                 if (isTyping) {
                     stopTyping();
@@ -447,7 +762,6 @@
                 return;
             }
 
-            // Start typing: emit typing_start
             if (!isTyping) {
                 isTyping = true;
                 socket.emit('typing_start', {
@@ -456,7 +770,6 @@
                 });
             }
 
-            // Debounce timer: reset countdown on every keystroke
             clearTimeout(typingDebounceTimer);
             typingDebounceTimer = setTimeout(() => {
                 stopTyping();
@@ -486,13 +799,11 @@
                 typingIndicator.classList.add('visible');
             }
 
-            // Auto-scroll messages container if user is already near bottom
             const isNearBottom = messagesDiv.scrollHeight - messagesDiv.scrollTop - messagesDiv.clientHeight < 120;
             if (isNearBottom) {
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
             }
 
-            // Auto-hide fallback after timeout
             clearTimeout(peerTypingTimeout);
             peerTypingTimeout = setTimeout(() => {
                 hideTypingIndicator();
@@ -506,8 +817,184 @@
             }
         }
 
+        // Toast notifications
+        function showToast(msg) {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = msg;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3800);
+        }
+
         // Input listeners for typing detection
         msgInput.addEventListener('input', handleTypingInput);
+
+        // Search input listener with debounce
+        userSearchInput.addEventListener('input', () => {
+            clearTimeout(searchDebounceTimer);
+            const query = userSearchInput.value.trim();
+            if (!query) {
+                searchResultsDiv.innerHTML = '<div class="empty-state">Type a username above to search for people.</div>';
+                return;
+            }
+
+            searchDebounceTimer = setTimeout(() => {
+                performUserSearch(query);
+            }, 300);
+        });
+
+        // Search users
+        function performUserSearch(query) {
+            if (!socket) return;
+            searchResultsDiv.innerHTML = '<div class="empty-state">Searching...</div>';
+
+            socket.emit('search_users', { query }, (res) => {
+                if (!res || !res.success) {
+                    searchResultsDiv.innerHTML = '<div class="empty-state">Search failed.</div>';
+                    return;
+                }
+
+                const users = res.users || [];
+                searchResultsDiv.innerHTML = '';
+                if (users.length === 0) {
+                    searchResultsDiv.innerHTML = '<div class="empty-state">No matching users found.</div>';
+                    return;
+                }
+
+                users.forEach(u => {
+                    const card = document.createElement('div');
+                    card.className = 'search-card';
+
+                    const info = document.createElement('div');
+                    info.className = 'card-info';
+
+                    const avatar = document.createElement('div');
+                    avatar.className = 'avatar-circle';
+                    avatar.textContent = u.username.charAt(0).toUpperCase();
+
+                    const textDiv = document.createElement('div');
+                    textDiv.innerHTML = `<div class="card-username">${u.username}</div>`;
+
+                    info.appendChild(avatar);
+                    info.appendChild(textDiv);
+
+                    const addBtn = document.createElement('button');
+                    addBtn.className = 'btn-action-sm btn-add';
+                    addBtn.textContent = 'Add Friend';
+                    addBtn.onclick = () => {
+                        addBtn.disabled = true;
+                        addBtn.textContent = 'Sending...';
+                        socket.emit('send_friend_request', { targetUserId: u.id, targetUsername: u.username }, (r) => {
+                            if (r && r.success) {
+                                if (r.accepted) {
+                                    addBtn.textContent = 'Friends ✓';
+                                    showToast(`You and ${u.username} are now friends!`);
+                                } else {
+                                    addBtn.textContent = 'Sent ✓';
+                                    addBtn.classList.add('sent');
+                                    showToast(`Friend request sent to ${u.username}!`);
+                                }
+                            } else {
+                                addBtn.disabled = false;
+                                addBtn.textContent = 'Add Friend';
+                                showToast((r && r.error) || 'Could not send request');
+                            }
+                        });
+                    };
+
+                    card.appendChild(info);
+                    card.appendChild(addBtn);
+                    searchResultsDiv.appendChild(card);
+                });
+            });
+        }
+
+        // Render Incoming Friend Requests Panel
+        function renderRequestsList(requests) {
+            pendingRequestsList = requests || [];
+            if (pendingRequestsList.length > 0) {
+                requestsBadge.textContent = pendingRequestsList.length;
+                requestsBadge.style.display = 'inline-block';
+            } else {
+                requestsBadge.style.display = 'none';
+            }
+
+            requestsListDiv.innerHTML = '';
+            if (pendingRequestsList.length === 0) {
+                requestsListDiv.innerHTML = '<div class="empty-state">No pending friend requests.</div>';
+                return;
+            }
+
+            pendingRequestsList.forEach(req => {
+                const card = document.createElement('div');
+                card.className = 'request-card';
+
+                const info = document.createElement('div');
+                info.className = 'card-info';
+
+                const avatar = document.createElement('div');
+                avatar.className = 'avatar-circle';
+                avatar.textContent = req.sender_username.charAt(0).toUpperCase();
+
+                const textDiv = document.createElement('div');
+                textDiv.innerHTML = `
+                    <div class="card-username">${req.sender_username}</div>
+                    <div class="card-subtext">Wants to be friends</div>
+                `;
+
+                info.appendChild(avatar);
+                info.appendChild(textDiv);
+
+                const actions = document.createElement('div');
+                actions.className = 'request-actions';
+
+                const acceptBtn = document.createElement('button');
+                acceptBtn.className = 'btn-action-sm btn-accept';
+                acceptBtn.textContent = 'Accept';
+                acceptBtn.onclick = () => acceptFriendRequest(req.request_id);
+
+                const rejectBtn = document.createElement('button');
+                rejectBtn.className = 'btn-action-sm btn-reject';
+                rejectBtn.textContent = 'Decline';
+                rejectBtn.onclick = () => rejectFriendRequest(req.request_id);
+
+                actions.appendChild(acceptBtn);
+                actions.appendChild(rejectBtn);
+
+                card.appendChild(info);
+                card.appendChild(actions);
+                requestsListDiv.appendChild(card);
+            });
+        }
+
+        function acceptFriendRequest(requestId) {
+            if (!socket) return;
+            socket.emit('accept_friend_request', { requestId }, (res) => {
+                if (res && res.success) {
+                    showToast('Friend request accepted!');
+                } else {
+                    showToast((res && res.error) || 'Failed to accept request');
+                }
+            });
+        }
+
+        function rejectFriendRequest(requestId) {
+            if (!socket) return;
+            socket.emit('reject_friend_request', { requestId }, (res) => {
+                if (res && res.success) {
+                    showToast('Friend request declined');
+                } else {
+                    showToast((res && res.error) || 'Failed to decline request');
+                }
+            });
+        }
 
         // Logout functionality
         logoutBtn.onclick = () => {
@@ -543,14 +1030,29 @@
                 logoutBtn.click();
             });
 
-            // Receive full initial user list with online status & IDs
+            // Receive filtered contacts list (only accepted friends)
             socket.on('user_list', (users) => {
-                usersCache = users;
+                usersCache = users || [];
                 renderUserList(usersCache);
                 if (activeRecipient) {
                     const current = usersCache.find(u => u.username === activeRecipient);
                     if (current) activeRecipientId = current.id;
                 }
+            });
+
+            // Receive pending friend requests
+            socket.on('friend_requests', (requests) => {
+                renderRequestsList(requests);
+            });
+
+            // Real-time notification when a new friend request arrives
+            socket.on('new_friend_request', ({ sender_username }) => {
+                showToast(`👋 ${sender_username} sent you a friend request!`);
+            });
+
+            // Real-time notification when target user accepted our request
+            socket.on('friend_request_accepted', ({ friend_username }) => {
+                showToast(`🎉 ${friend_username} accepted your friend request!`);
             });
 
             // Listen for live status toggles from Redis/Socket broadcast
@@ -566,12 +1068,12 @@
             // Listen for incoming private messages
             socket.on('private_message', ({ sender, senderId, content }) => {
                 if (activeRecipient === sender || (activeRecipientId && activeRecipientId === senderId)) {
-                    hideTypingIndicator(); // Recipient got the message, stop typing indicator
+                    hideTypingIndicator();
                     appendMessage(sender, content, 'peer-msg');
                 }
             });
 
-            // 4: Recipient browser listens for typing events
+            // Recipient browser listens for typing events
             socket.on('typing_start', ({ sender, senderId }) => {
                 if (activeRecipient === sender || (activeRecipientId && activeRecipientId === senderId)) {
                     showTypingIndicator(sender);
@@ -585,13 +1087,23 @@
             });
         }
 
+        // Render Filtered Contact List (Accepted Friends)
         function renderUserList(users) {
+            usersCache = users || [];
+            if (friendsBadge) friendsBadge.textContent = usersCache.length;
+
             userListDiv.innerHTML = '';
-            if (users.length === 0) {
-                userListDiv.innerHTML = '<div style="color:#94a3b8; font-size:13px; padding:10px;">No other users</div>';
+            if (usersCache.length === 0) {
+                userListDiv.innerHTML = `
+                    <div class="empty-state">
+                        <div style="font-size:22px; margin-bottom: 6px;">👥</div>
+                        <div style="font-weight:600; color:#475569; margin-bottom: 4px;">No friends yet</div>
+                        <div style="font-size:12px;">Click <strong>+ Add</strong> above to search and add friends to chat with!</div>
+                    </div>
+                `;
                 return;
             }
-            users.forEach(user => {
+            usersCache.forEach(user => {
                 const div = document.createElement('div');
                 div.className = `user-item ${activeRecipient === user.username ? 'active' : ''}`;
 
