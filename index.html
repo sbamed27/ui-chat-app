@@ -531,6 +531,294 @@
             from { transform: translateY(-10px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+
+        /* Modal Styles */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            animation: fadeInModal 0.2s ease-out;
+        }
+
+        .modal-backdrop.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            border-radius: 16px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            animation: scaleInModal 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleInModal {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 18px 20px 14px 20px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-close-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 20px;
+            cursor: pointer;
+            width: auto;
+            margin: 0;
+            padding: 4px 8px;
+            border-radius: 6px;
+            line-height: 1;
+            transition: all 0.15s ease;
+        }
+
+        .modal-close-btn:hover {
+            color: #1e293b;
+            background: #f1f5f9;
+        }
+
+        .modal-body {
+            padding: 18px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            max-height: 75vh;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            margin: 0;
+            padding: 9px 12px;
+            font-size: 13.5px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: #ffffff;
+            font-family: inherit;
+            color: #1e293b;
+            transition: all 0.2s ease;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .form-hint {
+            font-size: 11px;
+            color: #94a3b8;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .modal-footer {
+            padding: 12px 20px 18px 20px;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .modal-footer button {
+            width: auto;
+            margin: 0;
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+            color: #1e293b;
+        }
+
+        .profile-badge-btn {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            padding: 4px 9px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            width: auto;
+            margin: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.15s ease;
+        }
+
+        .profile-badge-btn:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .user-status-text {
+            font-size: 11.5px;
+            color: #64748b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 165px;
+            font-style: italic;
+            cursor: pointer;
+        }
+
+        .user-status-text:hover {
+            color: #2563eb;
+        }
+
+        .chat-header-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 10px;
+            margin-bottom: 8px;
+        }
+
+        .chat-header-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            overflow: hidden;
+        }
+
+        .chat-header-title {
+            margin: 0;
+            font-size: 15.5px;
+            font-weight: 600;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chat-header-sub {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* Profile Details View */
+        .profile-view-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 10px 0;
+            gap: 12px;
+        }
+
+        .profile-view-avatar {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+        }
+
+        .profile-view-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .profile-view-username {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: -8px;
+        }
+
+        .profile-view-status {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12.5px;
+            color: #334155;
+            width: 100%;
+            box-sizing: border-box;
+            word-break: break-word;
+        }
+
+        .profile-view-bio-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 13px;
+            color: #475569;
+            width: 100%;
+            text-align: left;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 
@@ -553,11 +841,17 @@
     <!-- CHAT APPLICATION SCREEN -->
     <div id="chat-screen" class="card" style="display:none; display:flex;">
         <div id="sidebar">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h3 id="current-user-label" style="margin:0; font-size: 15px; font-weight: 600;"></h3>
-                <button id="logout-btn" style="width: auto; margin:0;">Logout</button>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div style="overflow: hidden; flex: 1;">
+                    <h3 id="current-user-label" style="margin:0; font-size: 14.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></h3>
+                    <div id="current-user-status" class="user-status-text" title="Click to edit your status and profile">Set status message...</div>
+                </div>
+                <div style="display: flex; gap: 4px; flex-shrink: 0;">
+                    <button id="edit-profile-btn" class="profile-badge-btn" type="button" title="Edit your profile">✏️ Profile</button>
+                    <button id="logout-btn" style="width: auto; margin:0;" title="Log out">Logout</button>
+                </div>
             </div>
-            <hr style="border:0; border-top:1px solid #e2e8f0; margin: 12px 0 10px 0;">
+            <hr style="border:0; border-top:1px solid #e2e8f0; margin: 10px 0 10px 0;">
 
             <!-- SIDEBAR TABS: FRIENDS, REQUESTS, SEARCH -->
             <div class="sidebar-tabs">
@@ -594,9 +888,15 @@
         </div>
 
         <div id="chat-main">
-            <h3 id="chat-header"
-                style="margin-top:0; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; font-size: 16px; font-weight: 600;">Select a
-                contact</h3>
+            <div class="chat-header-wrap">
+                <div class="chat-header-info">
+                    <h3 id="chat-header" class="chat-header-title">Select a contact</h3>
+                    <div id="chat-header-sub" class="chat-header-sub" style="display:none;"></div>
+                </div>
+                <button id="view-profile-btn" class="profile-badge-btn" type="button" style="display:none;" title="View user profile">
+                    👤 Profile
+                </button>
+            </div>
             <div id="messages"></div>
 
             <!-- ANIMATED TYPING INDICATOR -->
@@ -617,6 +917,78 @@
                     style="margin:0;">
                 <button type="submit" style="width: 100px; margin:0;">Send</button>
             </form>
+        </div>
+    </div>
+
+    <!-- EDIT PROFILE MODAL -->
+    <div id="profile-modal" class="modal-backdrop">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">✏️ Edit Profile</h4>
+                <button type="button" class="modal-close-btn" id="close-profile-modal-btn">&times;</button>
+            </div>
+            <form id="profile-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="profile-username-input" disabled style="background:#f1f5f9; cursor:not-allowed; color:#64748b;">
+                        <span class="form-hint">Username cannot be changed</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-display-name-input">Display Name</label>
+                        <input type="text" id="profile-display-name-input" maxlength="100" placeholder="e.g. Alex Hunter">
+                        <div class="form-hint">
+                            <span>How friends see your name</span>
+                            <span id="display-name-counter">0/100</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-status-input">Status Message</label>
+                        <input type="text" id="profile-status-input" maxlength="255" placeholder="e.g. Available for chat ☕">
+                        <div class="form-hint">
+                            <span>Short note shown in friends list</span>
+                            <span id="status-counter">0/255</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-bio-input">About / Bio</label>
+                        <textarea id="profile-bio-input" maxlength="500" placeholder="Share a few words about what you work on or like..."></textarea>
+                        <div class="form-hint">
+                            <span>Text-only biography</span>
+                            <span id="bio-counter">0/500</span>
+                        </div>
+                    </div>
+                    <div id="profile-form-error" style="color:#ef4444; font-size:12.5px; display:none;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" id="cancel-profile-btn">Cancel</button>
+                    <button type="submit" id="save-profile-btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- VIEW CONTACT PROFILE MODAL -->
+    <div id="view-profile-modal" class="modal-backdrop">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">👤 User Profile</h4>
+                <button type="button" class="modal-close-btn" id="close-view-profile-modal-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="profile-view-card">
+                    <div class="profile-view-avatar" id="view-profile-avatar">?</div>
+                    <div>
+                        <div class="profile-view-name" id="view-profile-display-name">Username</div>
+                        <div class="profile-view-username" id="view-profile-username">@username</div>
+                    </div>
+                    <div class="profile-view-status" id="view-profile-status" style="display:none;"></div>
+                    <div class="profile-view-bio-box" id="view-profile-bio" style="display:none;"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" id="close-view-profile-btn">Close</button>
+            </div>
         </div>
     </div>
 
@@ -676,6 +1048,42 @@
         const requestsBadge = document.getElementById('requests-badge');
         const friendsBadge = document.getElementById('friends-badge');
 
+        const currentUserStatus = document.getElementById('current-user-status');
+        const editProfileBtn = document.getElementById('edit-profile-btn');
+        const chatHeaderSub = document.getElementById('chat-header-sub');
+        const viewProfileBtn = document.getElementById('view-profile-btn');
+
+        // Edit Profile Modal Elements
+        const profileModal = document.getElementById('profile-modal');
+        const closeProfileModalBtn = document.getElementById('close-profile-modal-btn');
+        const cancelProfileBtn = document.getElementById('cancel-profile-btn');
+        const profileForm = document.getElementById('profile-form');
+        const profileUsernameInput = document.getElementById('profile-username-input');
+        const profileDisplayNameInput = document.getElementById('profile-display-name-input');
+        const profileStatusInput = document.getElementById('profile-status-input');
+        const profileBioInput = document.getElementById('profile-bio-input');
+        const profileFormError = document.getElementById('profile-form-error');
+        const saveProfileBtn = document.getElementById('save-profile-btn');
+        const displayNameCounter = document.getElementById('display-name-counter');
+        const statusCounter = document.getElementById('status-counter');
+        const bioCounter = document.getElementById('bio-counter');
+
+        // View Profile Modal Elements
+        const viewProfileModal = document.getElementById('view-profile-modal');
+        const closeViewProfileModalBtn = document.getElementById('close-view-profile-modal-btn');
+        const closeViewProfileBtn = document.getElementById('close-view-profile-btn');
+        const viewProfileAvatar = document.getElementById('view-profile-avatar');
+        const viewProfileDisplayName = document.getElementById('view-profile-display-name');
+        const viewProfileUsername = document.getElementById('view-profile-username');
+        const viewProfileStatus = document.getElementById('view-profile-status');
+        const viewProfileBio = document.getElementById('view-profile-bio');
+
+        let myProfile = {
+            displayName: '',
+            statusMessage: '',
+            bio: ''
+        };
+
         // Tab navigation handlers
         tabFriendsBtn.onclick = () => switchTab('friends');
         tabRequestsBtn.onclick = () => switchTab('requests');
@@ -702,6 +1110,186 @@
                 userSearchInput.focus();
             }
         }
+
+        // Character counter listeners
+        function updateCharCounters() {
+            displayNameCounter.textContent = `${profileDisplayNameInput.value.length}/100`;
+            statusCounter.textContent = `${profileStatusInput.value.length}/255`;
+            bioCounter.textContent = `${profileBioInput.value.length}/500`;
+        }
+
+        profileDisplayNameInput.addEventListener('input', updateCharCounters);
+        profileStatusInput.addEventListener('input', updateCharCounters);
+        profileBioInput.addEventListener('input', updateCharCounters);
+
+        // Fetch current user's profile
+        async function loadMyProfile() {
+            if (!currentUsername) return;
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/profile/${encodeURIComponent(currentUsername)}`);
+                const data = await res.json();
+                if (data && data.success && data.profile) {
+                    const p = data.profile;
+                    myProfile.displayName = p.display_name || '';
+                    myProfile.statusMessage = p.status_message || '';
+                    myProfile.bio = p.bio || '';
+                    updateCurrentUserHeader();
+                }
+            } catch (err) {
+                console.error('Failed to load profile:', err);
+            }
+        }
+
+        function updateCurrentUserHeader() {
+            if (!currentUsername) return;
+            const shownName = myProfile.displayName ? `${myProfile.displayName} (@${currentUsername})` : `User: ${currentUsername}`;
+            currentUserLabel.textContent = shownName;
+            currentUserLabel.title = `@${currentUsername}`;
+
+            if (myProfile.statusMessage) {
+                currentUserStatus.textContent = `💬 "${myProfile.statusMessage}"`;
+                currentUserStatus.style.fontStyle = 'normal';
+                currentUserStatus.style.color = '#334155';
+            } else {
+                currentUserStatus.textContent = 'Set status message...';
+                currentUserStatus.style.fontStyle = 'italic';
+                currentUserStatus.style.color = '#94a3b8';
+            }
+        }
+
+        // Open & close edit profile modal
+        editProfileBtn.onclick = () => openProfileModal();
+        currentUserStatus.onclick = () => openProfileModal();
+
+        function openProfileModal() {
+            profileUsernameInput.value = currentUsername || '';
+            profileDisplayNameInput.value = myProfile.displayName || '';
+            profileStatusInput.value = myProfile.statusMessage || '';
+            profileBioInput.value = myProfile.bio || '';
+            profileFormError.style.display = 'none';
+            profileFormError.textContent = '';
+            updateCharCounters();
+            profileModal.classList.add('open');
+            profileDisplayNameInput.focus();
+        }
+
+        function closeProfileModal() {
+            profileModal.classList.remove('open');
+        }
+
+        closeProfileModalBtn.onclick = closeProfileModal;
+        cancelProfileBtn.onclick = closeProfileModal;
+
+        // Profile Form Submit (PUT /api/profile)
+        profileForm.onsubmit = async (e) => {
+            e.preventDefault();
+            profileFormError.style.display = 'none';
+            profileFormError.textContent = '';
+            saveProfileBtn.disabled = true;
+            saveProfileBtn.textContent = 'Saving...';
+
+            const newDisplayName = profileDisplayNameInput.value.trim();
+            const newStatus = profileStatusInput.value.trim();
+            const newBio = profileBioInput.value.trim();
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        display_name: newDisplayName,
+                        status_message: newStatus,
+                        bio: newBio
+                    })
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Failed to update profile');
+
+                const p = data.profile;
+                myProfile.displayName = p.display_name || '';
+                myProfile.statusMessage = p.status_message || '';
+                myProfile.bio = p.bio || '';
+
+                updateCurrentUserHeader();
+                closeProfileModal();
+                showToast('✅ Profile updated successfully!');
+            } catch (err) {
+                profileFormError.textContent = err.message;
+                profileFormError.style.display = 'block';
+            } finally {
+                saveProfileBtn.disabled = false;
+                saveProfileBtn.textContent = 'Save Changes';
+            }
+        };
+
+        // Open & close view profile modal
+        viewProfileBtn.onclick = () => {
+            if (activeRecipient) openContactProfile(activeRecipient);
+        };
+
+        async function openContactProfile(identifier) {
+            if (!identifier) return;
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/profile/${encodeURIComponent(identifier)}`);
+                const data = await res.json();
+                if (!res.ok || !data.profile) {
+                    showToast('Could not load user profile');
+                    return;
+                }
+
+                const p = data.profile;
+                const displayName = p.display_name || p.username;
+                viewProfileAvatar.textContent = displayName.charAt(0).toUpperCase();
+                viewProfileDisplayName.textContent = displayName;
+                viewProfileUsername.textContent = `@${p.username}`;
+
+                if (p.status_message) {
+                    viewProfileStatus.textContent = `💬 "${p.status_message}"`;
+                    viewProfileStatus.style.display = 'block';
+                } else {
+                    viewProfileStatus.style.display = 'none';
+                }
+
+                if (p.bio) {
+                    viewProfileBio.textContent = p.bio;
+                    viewProfileBio.style.display = 'block';
+                    viewProfileBio.style.color = '#475569';
+                } else {
+                    viewProfileBio.textContent = 'No bio provided yet.';
+                    viewProfileBio.style.display = 'block';
+                    viewProfileBio.style.color = '#94a3b8';
+                }
+
+                viewProfileModal.classList.add('open');
+            } catch (err) {
+                console.error('Error fetching profile:', err);
+                showToast('Failed to load profile');
+            }
+        }
+
+        function closeContactProfile() {
+            viewProfileModal.classList.remove('open');
+        }
+
+        closeViewProfileModalBtn.onclick = closeContactProfile;
+        closeViewProfileBtn.onclick = closeContactProfile;
+
+        // Close modals on clicking backdrop or pressing Escape
+        window.addEventListener('click', (e) => {
+            if (e.target === profileModal) closeProfileModal();
+            if (e.target === viewProfileModal) closeContactProfile();
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeProfileModal();
+                closeContactProfile();
+            }
+        });
 
         // Toggle between Sign In and Sign Up views
         toggleMode.onclick = () => {
@@ -879,8 +1467,17 @@
                     avatar.className = 'avatar-circle';
                     avatar.textContent = u.username.charAt(0).toUpperCase();
 
+                    const displayName = u.displayName || u.username;
+                    const nameHtml = u.displayName && u.displayName !== u.username
+                        ? `<span class="card-username">${displayName}</span> <span style="font-size:11px; color:#94a3b8;">(@${u.username})</span>`
+                        : `<span class="card-username">${u.username}</span>`;
+                    const statusHtml = u.statusMessage
+                        ? `<div class="card-subtext" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:140px;">${u.statusMessage}</div>`
+                        : '';
+
                     const textDiv = document.createElement('div');
-                    textDiv.innerHTML = `<div class="card-username">${u.username}</div>`;
+                    textDiv.style.cssText = 'overflow: hidden;';
+                    textDiv.innerHTML = `${nameHtml}${statusHtml}`;
 
                     info.appendChild(avatar);
                     info.appendChild(textDiv);
@@ -1000,6 +1597,9 @@
         logoutBtn.onclick = () => {
             stopTyping();
             hideTypingIndicator();
+            closeProfileModal();
+            closeContactProfile();
+            myProfile = { displayName: '', statusMessage: '', bio: '' };
             localStorage.clear();
             if (socket) socket.disconnect();
             chatScreen.style.display = 'none';
@@ -1007,6 +1607,8 @@
             document.getElementById('password').value = '';
             activeRecipient = null;
             activeRecipientId = null;
+            chatHeaderSub.style.display = 'none';
+            viewProfileBtn.style.display = 'none';
         };
 
         // Auto-login if token already exists in browser storage
@@ -1017,7 +1619,8 @@
         function initChatApp() {
             authScreen.style.display = 'none';
             chatScreen.style.display = 'flex';
-            currentUserLabel.textContent = `User: ${currentUsername}`;
+            updateCurrentUserHeader();
+            loadMyProfile();
 
             // Initialize Socket.io connection, passing JWT in auth handshake
             socket = io(BACKEND_URL, {
@@ -1036,7 +1639,10 @@
                 renderUserList(usersCache);
                 if (activeRecipient) {
                     const current = usersCache.find(u => u.username === activeRecipient);
-                    if (current) activeRecipientId = current.id;
+                    if (current) {
+                        activeRecipientId = current.id;
+                        updateActiveChatHeader(current);
+                    }
                 }
             });
 
@@ -1062,6 +1668,34 @@
                     user.isOnline = isOnline;
                     if (id && !user.id) user.id = id;
                     renderUserList(usersCache);
+                }
+                if (activeRecipient === username) {
+                    const currentPeer = user || { username, isOnline };
+                    updateActiveChatHeader(currentPeer);
+                }
+            });
+
+            // Listen for profile updates broadcast from server / other clients
+            socket.on('profile_updated', (profile) => {
+                if (profile.username === currentUsername) {
+                    myProfile.displayName = profile.displayName || '';
+                    myProfile.statusMessage = profile.statusMessage || '';
+                    myProfile.bio = profile.bio || '';
+                    updateCurrentUserHeader();
+                }
+
+                // Update users cache if peer is in friends list
+                const cached = usersCache.find(u => u.username === profile.username || u.id === profile.id);
+                if (cached) {
+                    cached.displayName = profile.displayName;
+                    cached.statusMessage = profile.statusMessage;
+                    cached.bio = profile.bio;
+                    renderUserList(usersCache);
+                }
+
+                // Update active chat header if current active chat peer updated their profile
+                if (activeRecipient === profile.username) {
+                    updateActiveChatHeader(profile);
                 }
             });
 
@@ -1110,15 +1744,59 @@
                 const dot = document.createElement('span');
                 dot.className = `status-dot ${user.isOnline ? 'online' : 'offline'}`;
 
-                const nameSpan = document.createElement('span');
-                nameSpan.textContent = user.username;
+                const infoWrap = document.createElement('div');
+                infoWrap.style.cssText = 'overflow: hidden; flex: 1; min-width: 0;';
+
+                const nameDiv = document.createElement('div');
+                nameDiv.style.cssText = 'font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
+                nameDiv.textContent = user.displayName || user.username;
+                infoWrap.appendChild(nameDiv);
+
+                if (user.statusMessage) {
+                    const statusDiv = document.createElement('div');
+                    statusDiv.style.cssText = 'font-size: 11px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
+                    statusDiv.textContent = user.statusMessage;
+                    infoWrap.appendChild(statusDiv);
+                } else if (user.displayName && user.displayName !== user.username) {
+                    const handleDiv = document.createElement('div');
+                    handleDiv.style.cssText = 'font-size: 11px; color: #94a3b8;';
+                    handleDiv.textContent = `@${user.username}`;
+                    infoWrap.appendChild(handleDiv);
+                }
 
                 div.appendChild(dot);
-                div.appendChild(nameSpan);
+                div.appendChild(infoWrap);
 
                 div.onclick = () => selectRecipient(user, div);
                 userListDiv.appendChild(div);
             });
+        }
+
+        function updateActiveChatHeader(userObj) {
+            const displayName = userObj.displayName || userObj.username || activeRecipient;
+            const username = userObj.username || activeRecipient;
+            chatHeader.textContent = displayName;
+            chatHeader.title = `@${username}`;
+
+            let subParts = [];
+            if (displayName !== username) {
+                subParts.push(`@${username}`);
+            }
+            if (userObj.statusMessage) {
+                subParts.push(`"${userObj.statusMessage}"`);
+            }
+            if (userObj.isOnline !== undefined) {
+                subParts.push(userObj.isOnline ? '🟢 Online' : '⚪ Offline');
+            }
+
+            if (subParts.length > 0) {
+                chatHeaderSub.textContent = subParts.join(' • ');
+                chatHeaderSub.style.display = 'block';
+            } else {
+                chatHeaderSub.style.display = 'none';
+            }
+
+            viewProfileBtn.style.display = 'inline-flex';
         }
 
         function selectRecipient(user, element) {
@@ -1130,7 +1808,9 @@
             activeRecipient = typeof user === 'string' ? user : user.username;
             activeRecipientId = typeof user === 'object' && user ? user.id : null;
 
-            chatHeader.textContent = `Chat with ${activeRecipient}`;
+            const userObj = typeof user === 'object' && user ? user : usersCache.find(u => u.username === activeRecipient) || { username: activeRecipient };
+            updateActiveChatHeader(userObj);
+
             messagesDiv.innerHTML = '';
             hideTypingIndicator();
             chatForm.style.display = 'flex';
